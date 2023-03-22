@@ -1,0 +1,3 @@
+banana|3|Frutas|12
+brocolis|6|Verduras|5
+cenoura|2|Verduras|11

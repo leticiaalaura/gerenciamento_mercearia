@@ -1,2 +1,6 @@
-banana|5|frutas|3|01/03/23
-banana|5|frutas|3|03/03/23
+banana|5|Frutas|10|22/03/23
+brocolis|8|Verduras|1|22/03/23
+cenoura|2|Verduras|4|22/03/23
+banana|3|Frutas|3|22/03/23
+brocolis|6|Verduras|2|22/03/23
+cenoura|2|Verduras|5|22/03/23
