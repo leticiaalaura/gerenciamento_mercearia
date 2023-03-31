@@ -1,4 +1,5 @@
-Frutas
-Verduras
 Legumes
 Carnes
+Verduras
+Frutas
+Laticinios

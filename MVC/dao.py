@@ -3,7 +3,7 @@ from models import *
 class DaoCategoria:
     @classmethod
     def salvar(cls, categoria):
-        with open('../categoria.txt', 'a') as arq:
+        with open('categoria.txt', 'a') as arq:
             arq.writelines(categoria)
             arq.writelines('\n')
 
@@ -46,7 +46,7 @@ class DaoEstoque:
     @classmethod
     def salvar(cls, produto: Produtos, quantidade):
         with open('estoque.txt', 'a') as arq:
-            arq.writelines(produto.nome + "|" + produto.preco + "|"
+            arq.writelines(produto.nome + "|" + str(produto.preco) + "|"
                            + produto.categoria + "|" + str(quantidade))
             arq.writelines('\n')
 
@@ -67,64 +67,65 @@ class DaoEstoque:
 class DaoFornecedor:
     @classmethod
     def salvar(cls, fornecedor: Fornecedor):
-        with open('../fornecedores.txt', 'a') as arq:
-            arq.writelines(fornecedor.nome + "|" + fornecedor.cnpj + "|"
+        with open('fornecedores.txt', 'a') as arq:
+            arq.writelines(fornecedor.nome + "|" + str(fornecedor.cnpj) + "|"
                            + fornecedor.contato + "|" + fornecedor.categoria)
             arq.writelines('\n')
 
     @classmethod
     def ler(cls):
-        with open('../fornecedores.txt', 'r') as arq:
+        with open('fornecedores.txt', 'r') as arq:
             cls.fornecedores = arq.readlines()
 
             cls.fornecedores = list(map(lambda x: x.replace('\n', ''), cls.fornecedores))
             cls.fornecedores = list(map(lambda x: x.split('|'), cls.fornecedores))
             forn = []
             for i in cls.fornecedores:
-                forn.append(Fornecedor(i[0], i[1], i[2]), i[3])
+                forn.append(Fornecedor(i[0], i[1], i[2], i[3]))
 
             return forn
 
 class DaoPessoa:
     @classmethod
     def salvar(cls, pesssoas: Pessoa):
-        with open('../clientes.txt', 'a') as arq:
-            arq.writelines(pesssoas.nome + "|" + pesssoas.cpf + "|"
+        with open('clientes.txt', 'a') as arq:
+            arq.writelines(pesssoas.nome + "|" + str(pesssoas.cpf) + "|"
                            + pesssoas.contato + "|" + pesssoas.endereco)
             arq.writelines('\n')
 
     @classmethod
     def ler(cls):
-        with open('../clientes.txt', 'r') as arq:
+        with open('clientes.txt', 'r') as arq:
             cls.clientes = arq.readlines()
 
             cls.clientes = list(map(lambda x: x.replace('\n', ''), cls.clientes))
             cls.clientes = list(map(lambda x: x.split('|'), cls.clientes))
             clientes = []
             for i in cls.clientes:
-                clientes.append(Venda(Pessoa(i[0], i[1], i[2]), i[3]))
+                clientes.append(Pessoa(i[0], i[1], i[2], i[3]))
 
             return clientes
 
 class DaoFuncionario:
     @classmethod
     def salvar(cls, funcionario: Funcionario):
-        with open('../funcionarios.txt', 'a') as arq:
+        with open('funcionarios.txt', 'a') as arq:
             arq.writelines(funcionario.cargo + "|" + funcionario.nome + "|"
-                           + funcionario.cpf + "|" + funcionario.contato + "|"
+                           + str(funcionario.cpf) + "|" + funcionario.contato + "|"
                            + funcionario.endereco)
             arq.writelines('\n')
 
     @classmethod
     def ler(cls):
-        with open('../funcionarios.txt', 'r') as arq:
+        with open('funcionarios.txt', 'r') as arq:
             cls.funcionarios = arq.readlines()
 
             cls.funcionarios = list(map(lambda x: x.replace('\n', ''), cls.funcionarios))
             cls.funcionarios = list(map(lambda x: x.split('|'), cls.funcionarios))
             func = []
             for i in cls.funcionarios:
-                func.append(Funcionario(Produtos(i[0], i[1], i[2]), i[3], i[4]))
+                func.append(Funcionario(i[0], i[1], i[2], i[3], i[4]))
 
             return func
+
 

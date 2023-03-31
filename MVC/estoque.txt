@@ -1,3 +1,4 @@
-banana|3|Frutas|12
-brocolis|6|Verduras|5
-cenoura|2|Verduras|11
+Leite|4|Laticinios|24
+Morango|6|Frutas|9
+Couve|3|Verduras|18
+Picanha|110|Carnes|49
