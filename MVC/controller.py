@@ -5,7 +5,7 @@ from MVC.models import Categoria, Produtos, Estoque, Venda, Fornecedor, Pessoa, 
 
 
 class ControllerCategoria:
-    def cadastrarCategoria(self, novaCategoria): ##ok
+    def cadastrarCategoria(self, novaCategoria):
         existe = False
         categoria = DaoCategoria.ler()
         for categoria in categoria:
@@ -17,7 +17,7 @@ class ControllerCategoria:
         else:
             print('Categoria ja existente!')
 
-    def removerCategoria(self, categoriaRemover): ##ok
+    def removerCategoria(self, categoriaRemover):
         categoria = DaoCategoria.ler()
         cat = list(filter(lambda categoria: categoria.categoria == categoriaRemover, categoria))
 
@@ -35,7 +35,18 @@ class ControllerCategoria:
                     arq.writelines(i.categoria)
                     arq.writelines('\n')
 
-    def alterarCategoria(self, categoriaAlterar, categoriaAlterada): ##ok
+        estoque = DaoEstoque.ler()
+        estoque = list(map(lambda x: Estoque(Produtos(x.produto.nome, x.produto.preco, 'Sem categoria'), x.quantidade)
+                           if(x.produto.categoria == categoriaRemover) else (x), estoque))
+
+        with open('estoque.txt', 'w') as arq:
+            for i in estoque:
+                arq.writelines(i.produto.nome + "|" + i.produto.preco + "|"
+                               + i.produto.categoria + "|" + str(i.quantidade))
+                arq.writelines('\n')
+
+
+    def alterarCategoria(self, categoriaAlterar, categoriaAlterada):
         categoria = DaoCategoria.ler()
         cat = list(filter(lambda categoria: categoria.categoria == categoriaAlterar, categoria))
 
@@ -44,6 +55,18 @@ class ControllerCategoria:
             if len(cat1) == 0:
                 categoria = list(map(lambda categoria: Categoria(categoriaAlterada) if(categoria.categoria == categoriaAlterar) else(categoria), categoria))
                 print('Alteração efetuada com sucesso!')
+
+                estoque = DaoEstoque.ler()
+                estoque = list(
+                    map(lambda x: Estoque(Produtos(x.produto.nome, x.produto.preco, categoriaAlterada), x.quantidade)
+                    if (x.produto.categoria == categoriaAlterar) else (x), estoque))
+
+                with open('estoque.txt', 'w') as arq:
+                    for i in estoque:
+                        arq.writelines(i.produto.nome + "|" + i.produto.preco + "|"
+                                       + i.produto.categoria + "|" + str(i.quantidade))
+                        arq.writelines('\n')
+
             else:
                 print('A categoria que deseja alterar já existe!')
 
@@ -55,16 +78,16 @@ class ControllerCategoria:
                 arq.writelines(categoria.categoria)
                 arq.writelines('\n')
 
-    def mostrarCategoria(self): ##ok
+    def mostrarCategoria(self):
         categorias = DaoCategoria.ler()
         if len(categorias) == 0:
             print('Categoria vazia')
         else:
-            for categoria in categorias:
-                print(f'Categoria: {categoria.categoria}') #####OJ      ##
+            for i in categorias:
+                print(f'Categoria: {i.categoria}')
 
 class ControllerEstoque:
-    def cadastrarProduto(self, nome, preco, categoria, quantidade):  ##ok
+    def cadastrarProduto(self, nome, preco, categoria, quantidade):
         estoque = DaoEstoque.ler()
         cat = DaoCategoria.ler()
         h = list(filter(lambda estoque: estoque.categoria == categoria, cat))
@@ -80,7 +103,7 @@ class ControllerEstoque:
         else:
             print('Categoria inexistente')
 
-    def removerProduto(self, nome):  ##ok
+    def removerProduto(self, nome):
         estoque = DaoEstoque.ler()
         est = list(filter(lambda estoque: estoque.produto.nome == nome, estoque))
         if len(est) > 0:
@@ -97,7 +120,7 @@ class ControllerEstoque:
                                + i.produto.categoria + "|" + str(i.quantidade))
                 arq.writelines('\n')
 
-    def alterarProduto(self, nomeAlterar, novoNome, novoPreco, novaCategoria, novaQuantidade): ##ok
+    def alterarProduto(self, nomeAlterar, novoNome, novoPreco, novaCategoria, novaQuantidade):
         estoque = DaoEstoque.ler()
         cat = DaoCategoria.ler()
         h = list(filter(lambda estoque: estoque.categoria == novaCategoria, cat))
@@ -121,7 +144,7 @@ class ControllerEstoque:
         else:
             print('A categoria não existe!')
 
-    def mostrarEstoque(self): ##ok
+    def mostrarEstoque(self):
         estoque = DaoEstoque.ler()
         if len(estoque) == 0:
             print('Estoque vazio')
@@ -136,7 +159,7 @@ class ControllerEstoque:
                 print("--------------------")
 
 class ControllerVenda:
-    def cadastrarVenda(self, nomeProduto, quantidadeVendida):  ##ok
+    def cadastrarVenda(self, nomeProduto, quantidadeVendida):
         estoque = DaoEstoque.ler()
         temp = []
         existe = False
@@ -175,7 +198,7 @@ class ControllerVenda:
             print('Venda realizada com sucesso')
             return valor_compra
 
-    def relatorioProdutos(self):  ##ok
+    def relatorioProdutos(self):
         vendas = DaoVenda.ler()
         produtos = []
         for venda in vendas:
@@ -198,7 +221,7 @@ class ControllerVenda:
             print(f"Quantidade: {i['quantidade']}\n")
             a += 1
 
-    def mostrarVenda(self, dataInicio, dataTermino): ##ok
+    def mostrarVenda(self, dataInicio, dataTermino):
         vendas = DaoVenda.ler()
         dataInicio1 = datetime.strptime(dataInicio, '%d/%m/%y')
         dataTermino1 = datetime.strptime(dataTermino, '%d/%m/%y')
@@ -222,7 +245,7 @@ class ControllerVenda:
 
 class ControllerFornecedor:
 
-    def cadastrarFornecedor(self, nome, cnpj, contato, categoria):  ##ok
+    def cadastrarFornecedor(self, nome, cnpj, contato, categoria):
         x = DaoFornecedor.ler()
         listaCnpj = list(filter(lambda x: x.cnpj == cnpj, x))
         listaContato = list(filter(lambda x: x.contato == contato, x))
@@ -238,7 +261,7 @@ class ControllerFornecedor:
             else:
                 print('Digite um CNPJ ou contato válido.')
 
-    def alterarFornecedor(self, nomeAlterar, novoNome, novoCnpj, novoContato, novaCategoria): ##ok
+    def alterarFornecedor(self, nomeAlterar, novoNome, novoCnpj, novoContato, novaCategoria):
         fornecedores = DaoFornecedor.ler()
 
         forn = list(filter(lambda fornecedores: fornecedores.nome == nomeAlterar, fornecedores))
@@ -246,6 +269,7 @@ class ControllerFornecedor:
             forn = list(filter(lambda fornecedores: fornecedores.cnpj == novoCnpj, fornecedores))
             if len(forn) == 0:
                 fornecedores = list(map(lambda fornecedores: Fornecedor(novoNome, novoCnpj, novoContato, novaCategoria) if (fornecedores.nome == nomeAlterar) else (fornecedores), fornecedores))
+            print('Fornecedor alterado com sucesso!')
         else:
             print('O fornecedor que deseja alterar não existe.')
 
@@ -253,9 +277,9 @@ class ControllerFornecedor:
             for fornecedor in fornecedores:
                 arq.writelines(fornecedor.nome + "|" + fornecedor.cnpj + "|" + fornecedor.contato + "|" + str(fornecedor.categoria))
                 arq.writelines('\n')
-            print('Fornecedor alterado com sucesso!')
+            # print('Fornecedor alterado com sucesso!')
 
-    def removerFornecedor(self, nome):  ##ok
+    def removerFornecedor(self, nome):
         fornecedores = DaoFornecedor.ler()
 
         forn = list(filter(lambda fornecedores: fornecedores.nome == nome, fornecedores))
@@ -273,7 +297,7 @@ class ControllerFornecedor:
                 arq.writelines('\n')
             print('Fornecedor removido com sucesso!')
 
-    def mostrarFornecedor(self):  ###ok
+    def mostrarFornecedor(self):
         fornecedor = DaoFornecedor.ler()
         if len(fornecedor) == 0:
             print('Não há fornecedores cadastrados!')
@@ -307,6 +331,7 @@ class ControllerCliente:
         if len(listaNome) > 0:
             cliente = list(map(lambda cliente: Pessoa(novoNome, novoCpf, novoContato, novoEndereco) if (cliente.nome == nomeAlterar)
             else (cliente), cliente))
+            print('Alteração efetuada com sucesso!')
         else:
             print('O cliente que deseja alterar não existe.')
 
@@ -315,7 +340,6 @@ class ControllerCliente:
                 arq.writelines(
                     cliente.nome + "|" + cliente.cpf + "|" + cliente.contato + "|" + cliente.endereco)
                 arq.writelines('\n')
-            print('Alteração efetuada com sucesso!')
 
     def removerCliente(self, nome):
         cliente = DaoPessoa.ler()
@@ -402,6 +426,5 @@ class ControllerFuncionario:
                 print("--------------------")
 
 
-a = ControllerFuncionario()
-a.mostrarFuncionario()
+
 

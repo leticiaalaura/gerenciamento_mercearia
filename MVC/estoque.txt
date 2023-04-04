@@ -1,4 +1,0 @@
-Leite|4|Laticinios|24
-Morango|6|Frutas|9
-Couve|3|Verduras|18
-Picanha|110|Carnes|49
